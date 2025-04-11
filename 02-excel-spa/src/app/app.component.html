@@ -1,0 +1,51 @@
+<header class="p-3 w-full bg-gray-200 sticky top-0 z-10">
+<nav class="flex flex-col gap-3 w-full">
+  <img src="/excel-icon.webp" alt="Logo excel" class="w-10 h-auto">
+
+  <!-- barra de formulas -->
+  <div class="flex  bg-gray-200">
+    <label for="formulaCelda" class="me-2">
+      Celda 
+      {{ celdaSeleccionada ? obtenerLetra(celdaSeleccionada.col) + (celdaSeleccionada.fila + 1) : '' }}
+    </label>
+    <input id="formulaCelda" type="text" class="flex-1 bg-white border border-gray-300 px-2" 
+    [(ngModel)]="inputValor" (keydown.enter)="guardarValor()" (blur)="guardarValor()">  
+  </div>
+</nav>
+</header>
+
+<main class="max-w-screen">
+
+  <!-- tabla -->
+    <table class="table-fixed w-full">
+      <thead class="sticky top-25 z-10">
+        <tr>
+          <th class="border border-gray-300 bg-gray-200 w-10"></th>
+          <th *ngFor="let col of columnas" class="border border-gray-300 bg-gray-200">
+            {{ obtenerLetra(col) }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let fila of filas">
+          <th class="border border-gray-300 bg-gray-200">{{ fila + 1 }}</th>
+          <td *ngFor="let col of columnas" class="border border-gray-300 relative">
+            <div *ngIf="celdaSeleccionada?.col !== col || celdaSeleccionada?.fila !== fila"
+              (click)="seleccionarCelda(col, fila)" class="min-w-[80px] min-h-[24px] cursor-pointer">
+              {{ valores[fila][col].value }}
+            </div>
+            <input *ngIf="celdaSeleccionada?.col === col && celdaSeleccionada?.fila === fila" [(ngModel)]="inputValor"
+              (blur)="guardarValor()" (keydown.enter)="guardarValor()" class="w-full border border-blue-500 px-1"
+              autofocus />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+</main>
+
+<footer class="flex gap-3 flex-wrap justify-center p-2 sticky bottom-0 bg-gray-200">
+  <p>&copy; Excel | SPA</p>
+  <p>Andres Mariano Fernández</p>
+  <p>{{fecha.getFullYear()}}</p>
+</footer>
